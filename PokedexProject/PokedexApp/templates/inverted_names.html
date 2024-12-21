@@ -1,0 +1,73 @@
+<!-- templates/main/inverted_names.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nabla&family=Pixelify+Sans:wght@400..700&display=swap" rel="stylesheet">
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inverted Pokemon Names</title>
+
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
+
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}" crossorigin="anonymous"/>
+</head>
+<body>
+    <header>
+
+        <div class="logo-container">
+            <img src="{%static 'img/pokedex.png'%}" alt="">
+            <h1>PokéDex</h1>
+        </div>
+
+        <nav>
+            <ul>
+                <li><a href="{% url 'get_pokemon_data' %}">All Pokemon</a></li>
+                <li><a href="{% url 'get_grass_pokemon' %}">Grass Pokémon</a></li>
+                <li><a href="{% url 'get_flying_pokemon' %}">Flying Pokemon (Height > 10)</a></li>
+                <li><a href="{% url 'get_pokemon_by_weight' %}">Pokemon by Weight</a></li>
+             </ul>
+        </nav>
+    </header>
+
+    
+    <main class="card-container">
+        {% for pokemon in pokemon_list %}
+            <div class="card">
+                <img src="{{ pokemon.sprite_url }}" alt="{{ pokemon.name }} Sprite">
+                <div class="card-details">
+                    <h2>{{ pokemon.name }}</h2>
+                    <p>ID: {{ pokemon.id }}</p>
+                    <p>Inverted Name: {{ pokemon.inverted_name }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+    
+
+    <div class="pagination">
+        <span class="step-links">
+            {% if pokemon_list.has_previous %}
+                <a href="{% url 'inverted_names' %}?page=1">&laquo; first</a>
+                <a href="{% url 'inverted_names' %}?page={{ pokemon_list.previous_page_number }}">previous</a>
+            {% endif %}
+    
+            <span class="current">
+                Page {{ pokemon_list.number }} of {{ pokemon_list.paginator.num_pages }}.
+            </span>
+    
+            {% if pokemon_list.has_next %}
+                <a href="{% url 'inverted_names' %}?page={{ pokemon_list.next_page_number }}">next</a>
+                <a href="{% url 'inverted_names' %}?page={{ pokemon_list.paginator.num_pages }}">last &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+
+</body>
+</html>
